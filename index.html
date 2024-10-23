@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Age Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background: linear-gradient(to right, #08b3b3, #007bff); /* Gradient applied */
+        }
+        .container {
+            text-align: center;
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
+        }
+        .heading {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        .input {
+            margin-bottom: 20px;
+        }
+        .result {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+        .box {
+            width: 100px;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        .box span {
+            font-size: 32px;
+            font-weight: bold;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        /* Error state styling */
+        <!-- input.error {
+            border: 2px solid red;
+        } -->
+        .error-message {
+            color: red;
+            font-size: 14px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="heading">Age Calculator</div>
+        <div class="input">
+            <input type="date" name="date" id="input_date">
+            <button onclick="calculateAge()">Calculate</button>
+            <div class="error-message" id="error-message">Please select a valid date.</div>
+        </div>
+        <div class="result">
+            <div class="box">
+                <span id="years">-</span>
+                <p>Years</p>
+            </div>
+            <div class="box">
+                <span id="months">-</span>
+                <p>Months</p>
+            </div>
+            <div class="box">
+                <span id="days">-</span>
+                <p>Days</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function calculateAge() {
+            const inputDate = document.getElementById('input_date');
+            const birthDate = new Date(inputDate.value);
+            const today = new Date();
+            const errorMessage = document.getElementById('error-message');
+
+            // Check if a valid date is selected
+            if (!inputDate.value || isNaN(birthDate)) {
+                inputDate.classList.add('error'); // Add red border to input
+                errorMessage.style.display = 'block'; // Show error message
+                return;
+            } else {
+                inputDate.classList.remove('error'); // Remove red border
+                errorMessage.style.display = 'none'; // Hide error message
+            }
+
+            // Check if the selected date is in the future
+            if (birthDate > today) {
+                alert("This is not a valid birth date! You cannot be born in the future.");
+                return;
+            }
+
+            let years = today.getFullYear() - birthDate.getFullYear();
+            let months = today.getMonth() - birthDate.getMonth();
+            let days = today.getDate() - birthDate.getDate();
+
+            if (days < 0) {
+                months--;
+                days += new Date(today.getFullYear(), today.getMonth(), 0).getDate(); // get days in the previous month
+            }
+
+            if (months < 0) {
+                years--;
+                months += 12;
+            }
+
+            // Update the UI
+            document.getElementById('years').textContent = years;
+            document.getElementById('months').textContent = months;
+            document.getElementById('days').textContent = days;
+        }
+    </script>
+</body>
+</html>
